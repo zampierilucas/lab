@@ -85,7 +85,7 @@ func Test_getCIRunOptions(t *testing.T) {
 			"noargs",
 			nil,
 			[]string{},
-			"zaquestion/test",
+			"root/test",
 			"master",
 			"",
 		},
@@ -93,7 +93,7 @@ func Test_getCIRunOptions(t *testing.T) {
 			"branch arg",
 			nil,
 			[]string{"mybranch"},
-			"zaquestion/test",
+			"root/test",
 			"mybranch",
 			"",
 		},
@@ -108,7 +108,7 @@ func Test_getCIRunOptions(t *testing.T) {
 		{
 			"project flag",
 			func() {
-				ciTriggerCmd.Flags().Set("project", "zaquestion/test")
+				ciTriggerCmd.Flags().Set("project", "root/test")
 			},
 			[]string{},
 			4181224, // https://gitlab.com/zaquestion/test project ID

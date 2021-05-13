@@ -43,7 +43,7 @@ func Test_getCurrentBranchMR(t *testing.T) {
 		t.Log(string(b))
 		t.Fatal(err)
 	}
-	mrNum := getCurrentBranchMR("zaquestion/test")
+	mrNum := getCurrentBranchMR("root/test")
 	err = os.Chdir(curDir)
 	if err != nil {
 		t.Log(string(b))
@@ -143,7 +143,7 @@ func Test_parseArgsRemoteAndID(t *testing.T) {
 		{
 			Name:           "No Args",
 			Args:           nil,
-			ExpectedString: "zaquestion/test",
+			ExpectedString: "root/test",
 			ExpectedInt:    0,
 			ExpectedErr:    "",
 		},
@@ -164,7 +164,7 @@ func Test_parseArgsRemoteAndID(t *testing.T) {
 		{
 			Name:           "1 arg page",
 			Args:           []string{"100"},
-			ExpectedString: "zaquestion/test",
+			ExpectedString: "root/test",
 			ExpectedInt:    100,
 			ExpectedErr:    "",
 		},
@@ -178,7 +178,7 @@ func Test_parseArgsRemoteAndID(t *testing.T) {
 		{
 			Name:           "2 arg remote page",
 			Args:           []string{"origin", "100"},
-			ExpectedString: "zaquestion/test",
+			ExpectedString: "root/test",
 			ExpectedInt:    100,
 			ExpectedErr:    "",
 		},
@@ -222,7 +222,7 @@ func Test_parseArgsRemoteAndProject(t *testing.T) {
 		{
 			Name:           "No Args",
 			Args:           nil,
-			ExpectedRemote: "zaquestion/test",
+			ExpectedRemote: "root/test",
 			ExpectedString: "",
 			ExpectedErr:    "",
 		},
@@ -236,21 +236,21 @@ func Test_parseArgsRemoteAndProject(t *testing.T) {
 		{
 			Name:           "1 arg non remote",
 			Args:           []string{"foo123"},
-			ExpectedRemote: "zaquestion/test",
+			ExpectedRemote: "root/test",
 			ExpectedString: "foo123",
 			ExpectedErr:    "",
 		},
 		{
 			Name:           "1 arg page",
 			Args:           []string{"100"},
-			ExpectedRemote: "zaquestion/test",
+			ExpectedRemote: "root/test",
 			ExpectedString: "100",
 			ExpectedErr:    "",
 		},
 		{
 			Name:           "2 arg remote and string",
 			Args:           []string{"origin", "foo123"},
-			ExpectedRemote: "zaquestion/test",
+			ExpectedRemote: "root/test",
 			ExpectedString: "foo123",
 			ExpectedErr:    "",
 		},

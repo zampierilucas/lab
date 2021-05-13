@@ -11,7 +11,7 @@ func Test_projectBrowse(t *testing.T) {
 	defer func() { browse = oldBrowse }()
 
 	browse = func(url string) error {
-		require.Equal(t, "https://gitlab.com/zaquestion/test", url)
+		require.Equal(t, "http://localhost/root/test", url)
 		return nil
 	}
 

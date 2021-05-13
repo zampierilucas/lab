@@ -29,7 +29,7 @@ func Test_mrShow(t *testing.T) {
 ===================================
 This MR is to remain open for testing the `+"`lab mr list`"+` functionality
 -----------------------------------
-Project: zaquestion/test
+Project: root/test
 Branches: mrtest->master
 Status: Open
 Assignee: zaquestion
@@ -42,7 +42,7 @@ Milestone: 1.0
 Labels: documentation
 Issues Closed by this MR: 
 Subscribed: Yes
-WebURL: https://gitlab.com/zaquestion/test/-/merge_requests/1`)
+WebURL: http://localhost/root/test/-/merge_requests/1`)
 	require.Contains(t, string(b), `commented at`)
 	require.Contains(t, string(b), `updated comment at`)
 }

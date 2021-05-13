@@ -344,10 +344,10 @@ func Test_mrCmd_Milestone(t *testing.T) {
 		b, _ = cmd.CombinedOutput()
 		out := string(b)
 		t.Log(out)
-		require.Contains(t, out, "https://gitlab.com/zaquestion/test/-/merge_requests")
+		require.Contains(t, out, "http://localhost/root/test/-/merge_requests")
 
 		i := strings.Index(out, "/diffs\n")
-		mrID = strings.TrimPrefix(out[:i], "https://gitlab.com/zaquestion/test/-/merge_requests/")
+		mrID = strings.TrimPrefix(out[:i], "http://localhost/root/test/-/merge_requests/")
 		t.Log(mrID)
 	})
 	t.Run("list", func(t *testing.T) {
@@ -515,7 +515,7 @@ func Test_mrCmd_assign_and_review(t *testing.T) {
 	// strip off "!"
 	mrID = mrID[1:]
 
-	mrURL := "https://gitlab.com/zaquestion/test/-/merge_requests/" + mrID
+	mrURL := "http://localhost/root/test/-/merge_requests/" + mrID
 
 	t.Run("assign_and_unassign", func(t *testing.T) {
 		mrEdit := exec.Command(labBinaryPath, "mr", "edit", mrID, "--assign", "lab-testing")

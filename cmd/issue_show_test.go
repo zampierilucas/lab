@@ -37,7 +37,7 @@ Labels: bug
 Related MRs: 1
 MRs that will close this Issue: 
 Subscribed: No
-WebURL: https://gitlab.com/zaquestion/test/-/issues/1
+WebURL: http://localhost/root/test/-/issues/1
 `)
 
 	require.Contains(t, string(b), `commented at`)
