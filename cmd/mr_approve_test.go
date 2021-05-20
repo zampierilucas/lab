@@ -45,6 +45,23 @@ func Test_mrApprove(t *testing.T) {
 	require.Contains(t, origOutput, `Merge Request !18 approved`)
 }
 
+func Test_mrAlreadyApproved(t *testing.T) {
+	repo := copyTestRepo(t)
+	orig := exec.Command(labBinaryPath, "mr", "approve", "18")
+	orig.Dir = repo
+
+	b, err := orig.CombinedOutput()
+	if err == nil {
+		t.Log(string(b))
+		t.Error(err)
+	}
+
+	origOutput := string(b)
+	origOutput = stripansi.Strip(origOutput)
+
+	require.Contains(t, origOutput, `Merge Request !18 already approved`)
+}
+
 func Test_mrUnapprove(t *testing.T) {
 	repo := copyTestRepo(t)
 	orig := exec.Command(labBinaryPath, "mr", "unapprove", "18")
@@ -60,4 +77,21 @@ func Test_mrUnapprove(t *testing.T) {
 	origOutput = stripansi.Strip(origOutput)
 
 	require.Contains(t, origOutput, `Merge Request !18 unapproved`)
+}
+
+func Test_mrAlreadyUnapproved(t *testing.T) {
+	repo := copyTestRepo(t)
+	orig := exec.Command(labBinaryPath, "mr", "unapprove", "18")
+	orig.Dir = repo
+
+	b, err := orig.CombinedOutput()
+	if err == nil {
+		t.Log(string(b))
+		t.Error(err)
+	}
+
+	origOutput := string(b)
+	origOutput = stripansi.Strip(origOutput)
+
+	require.Contains(t, origOutput, `Merge Request !18 already unapproved`)
 }
