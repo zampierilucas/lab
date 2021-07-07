@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+	lab "github.com/zaquestion/lab/internal/gitlab"
 	"strconv"
 
 	"github.com/MakeNowJust/heredoc/v2"
@@ -32,8 +34,19 @@ var todoIssueCmd = &cobra.Command{
 }
 
 func todoAddIssue(project string, issueNum int) {
-	// https://github.com/xanzy/go-gitlab/pull/1130
-	log.Fatal("Adding issues not implemented.")
+	todoID, err := lab.TodoIssueCreate(project, issueNum)
+	if err != nil {
+		if err == lab.ErrNotModified {
+			log.Fatalf("Todo entry already exists for Issue !%d", issueNum)
+		}
+		log.Fatal(err)
+	}
+
+	issue, err := lab.IssueGet(project, issueNum)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(todoID, issue.WebURL)
 }
 
 func init() {
