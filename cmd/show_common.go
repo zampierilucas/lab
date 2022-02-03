@@ -3,12 +3,12 @@ package cmd
 import (
 	"bufio"
 	"fmt"
+	"github.com/MakeNowJust/heredoc/v2"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/MakeNowJust/heredoc/v2"
 	"github.com/araddon/dateparse"
 	"github.com/charmbracelet/glamour"
 	"github.com/charmbracelet/glamour/ansi"
@@ -242,7 +242,16 @@ func getTermRenderer(style glamour.TermRendererOption) (*glamour.TermRenderer, e
 	return r, err
 }
 
-func printDiscussions(project string, discussions []*gitlab.Discussion, since string, idstr string, idNum int, renderMarkdown bool) {
+type NoteLevel int
+
+const (
+	none NoteLevel = iota
+	comments
+	activities
+	full
+)
+
+func printDiscussions(project string, discussions []*gitlab.Discussion, since string, idstr string, idNum int, renderMarkdown bool, noteLevel NoteLevel) {
 	newAccessTime := time.Now().UTC()
 
 	issueEntry := fmt.Sprintf("%s%d", idstr, idNum)
@@ -269,7 +278,9 @@ func printDiscussions(project string, discussions []*gitlab.Discussion, since st
 	// https://godoc.org/github.com/xanzy/go-gitlab#Discussion
 	for _, discussion := range discussions {
 		for i, note := range discussion.Notes {
-
+			if (noteLevel == activities && note.System == false) || noteLevel == comments && note.System == true {
+				continue
+			}
 			indentHeader, indentNote := "", ""
 			commented := "commented"
 			if !time.Time(*note.CreatedAt).Equal(time.Time(*note.UpdatedAt)) {

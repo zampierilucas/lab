@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/MakeNowJust/heredoc/v2"
 	"strings"
 
-	"github.com/MakeNowJust/heredoc/v2"
 	"github.com/charmbracelet/glamour"
 	"github.com/rsteube/carapace"
 	"github.com/spf13/cobra"
@@ -78,8 +78,17 @@ var mrShowCmd = &cobra.Command{
 
 		printMR(mr, rn, renderMarkdown)
 
-		showComments, _ := cmd.Flags().GetBool("comments")
-		if showComments {
+		var noteLevel = none
+
+		if showComments, _ := cmd.Flags().GetBool("comments"); showComments {
+			noteLevel = comments
+		} else if showActivities, _ := cmd.Flags().GetBool("activities"); showActivities {
+			noteLevel = activities
+		} else if showFull, _ := cmd.Flags().GetBool("full"); showFull || showComments && showActivities {
+			noteLevel = full
+		}
+
+		if noteLevel != none {
 			discussions, err := lab.MRListDiscussions(rn, int(mrNum))
 			if err != nil {
 				log.Fatal(err)
@@ -90,7 +99,7 @@ var mrShowCmd = &cobra.Command{
 				log.Fatal(err)
 			}
 
-			printDiscussions(rn, discussions, since, "mr", int(mrNum), renderMarkdown)
+			printDiscussions(rn, discussions, since, "mr", int(mrNum), renderMarkdown, noteLevel)
 		}
 	},
 }
@@ -248,7 +257,9 @@ func printMR(mr *gitlab.MergeRequest, project string, renderMarkdown bool) {
 
 func init() {
 	mrShowCmd.Flags().BoolP("no-markdown", "M", false, "don't use markdown renderer to print the issue description")
-	mrShowCmd.Flags().BoolP("comments", "c", false, "show comments for the merge request (does not work with --patch)")
+	mrShowCmd.Flags().BoolP("comments", "c", false, "show only comments for the merge request (does not work with --patch)")
+	mrShowCmd.Flags().BoolP("activities", "a", false, "show only activities for the merge request (does not work with --patch)")
+	mrShowCmd.Flags().BoolP("full", "f", false, "show both activities and comments for the merge request (does not work with --patch)")
 	mrShowCmd.Flags().StringP("since", "s", "", "show comments since specified date (format: 2020-08-21 14:57:46.808 +0000 UTC)")
 	mrShowCmd.Flags().BoolVarP(&mrShowPatch, "patch", "p", false, "show MR patches (does not work with --comments)")
 	mrShowCmd.Flags().BoolVarP(&mrShowPatchReverse, "reverse", "", false, "reverse order when showing MR patches (chronological instead of anti-chronological)")
