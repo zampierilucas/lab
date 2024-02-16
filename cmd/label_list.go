@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/MakeNowJust/heredoc/v2"
+	"github.com/aybabtme/rgbterm"
 	"github.com/rsteube/carapace"
 	"github.com/spf13/cobra"
 	"github.com/zaquestion/lab/internal/action"
@@ -53,7 +54,13 @@ var labelListCmd = &cobra.Command{
 				description = " - " + label.Description
 			}
 
-			fmt.Printf("%s%s\n", label.Name, description)
+			// Convert hex color to rgb object
+			c := HexToRGB(label.Color)
+
+			// Set background color to label.Color
+			coloredLabelName := rgbterm.BgString(label.Name, c.R, c.G, c.B)
+
+			fmt.Printf("%s%s\n", coloredLabelName, description)
 		}
 	},
 }
